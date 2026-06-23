@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documento do Amor 💕</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700&display=swap');
+ 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
+        body {
+            font-family: 'Nunito', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+ 
+        /* ===== TELAS ===== */
+        .tela {
+            display: none;
+            min-height: 100vh;
+            width: 100%;
+        }
+ 
+        .tela.ativa {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+ 
+        /* ===== TELA DO QUIZ ===== */
+        #tela-quiz {
+            background: url('gato-do-amor.jpeg') center center / cover no-repeat fixed;
+            background-size: 80% 150%;
+            padding: 20px;
+        }
+ 
+        #tela-quiz::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+        }
+ 
+        .quiz-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 680px;
+        }
+ 
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+ 
+        .quiz-header h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+            margin-bottom: 10px;
+        }
+ 
+        .quiz-header p {
+            color: #ffd6e7;
+            font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+        }
+ 
+        .card-pergunta {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 20px;
+        }
+ 
+        .card-pergunta h2 {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        }
+ 
+        .card-pergunta img {
+            width: 180px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            display: block;
+        }
+ 
+        /* Radio buttons */
+        .opcoes label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: background 0.2s;
+        }
+ 
+        .opcoes label:hover {
+            background: rgba(255,255,255,0.2);
+        }
+ 
+        .opcoes input[type="radio"] {
+            accent-color: #ff6b9d;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+ 
+        /* Campo de texto */
+        .card-pergunta input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            font-size: 0.95rem;
+            font-family: 'Nunito', sans-serif;
+            outline: none;
+            transition: border 0.2s;
+        }
+ 
+        .card-pergunta input[type="text"]::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+ 
+        .card-pergunta input[type="text"]:focus {
+            border-color: #ff6b9d;
+            background: rgba(255,255,255,0.25);
+        }
+ 
+        /* Botão enviar */
+        .btn-enviar {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ff6b9d, #c44dff);
+            color: #fff;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
+            transition: transform 0.15s, box-shadow 0.15s;
+            margin-top: 6px;
+        }
+ 
+        .btn-enviar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(255, 107, 157, 0.6);
+        }
+ 
+        .btn-enviar:active {
+            transform: translateY(0);
+        }
+ 
+        /* ===== TELA DE VITÓRIA ===== */
+        #tela-vitoria {
+  background-image: 
+    url('foto-do-amor.jpeg'),
+    url('foto-de-chamego.jpeg');
+
+  background-position: 
+    left center,
+    right center;
+
+  background-repeat: no-repeat, no-repeat;
+
+  background-size: 30% 80%, 30% 80%;
+
+  position: relative;
+}
+ 
+        #tela-vitoria::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+        }
+ 
+        .resultado-box {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 36px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 24px;
+            max-width: 500px;
+            margin: 20px;
+        }
+ 
+        .resultado-box .emoji-big {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+ 
+        .resultado-box h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+            margin-bottom: 12px;
+        }
+ 
+        .resultado-box p {
+            color: #ffd6e7;
+            font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            margin-bottom: 24px;
+        }
+ 
+        /* ===== TELA DE DERROTA ===== */
+        #tela-derrota {
+            background: url('amir.jpeg') center center / cover no-repeat;
+            background-size: 80% 150%;
+            position: relative;
+        }
+ 
+        #tela-derrota::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+ 
+        /* Botão reiniciar */
+        .btn-reiniciar {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #ff6b9d, #c44dff);
+            color: #fff;
+            font-family: 'Pacifico', cursive;
+            font-size: 1rem;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255,107,157,0.5);
+            transition: transform 0.15s;
+        }
+ 
+        .btn-reiniciar:hover {
+            transform: translateY(-2px);
+        }
+ 
+        /* Audio players */
+        .audio-player {
+            margin-top: 20px;
+        }
+ 
+        audio {
+            width: 100%;
+            border-radius: 10px;
+            outline: none;
+        }
+ 
+        abbr {
+            text-decoration: underline dotted;
+            cursor: help;
+        }
+    </style>
+</head>
+<body>
+ 
+    <!-- ===== TELA DO QUIZ ===== -->
+    <div id="tela-quiz" class="tela ativa">
+        <div class="quiz-container">
+ 
+            <div class="quiz-header">
+                <h1>Documento do Amor 💕</h1>
+                <p>Um quiz feito pra mostrar que tenho conhecimentos a respeito do meu <abbr title="Irlley Luiza">mozão</abbr> 🤓👆</p>
+                <p style="margin-top:6px;">Tá vendo? eu te amo mais hehehe</p>
+            </div>
+ 
+            <!-- Pergunta 1 -->
+            <div class="card-pergunta">
+                <h2>Qual o doce favorito do <abbr title="Irlley Luiza">meu amor</abbr>? 🤨</h2>
+                <div class="opcoes">
+                    <label><input type="radio" value="Chocolate meio amargo" name="p1"> Chocolate meio amargo</label>
+                    <label><input type="radio" value="Bombom de Pistache" name="p1"> Bombom de Pistache</label>
+                    <label><input type="radio" value="Bombom de Cereja" name="p1"> Bombom de Cereja</label>
+                    <label><input type="radio" value="Caipirão" name="p1"> Caipirão</label>
+                </div>
+            </div>
+ 
+            <!-- Pergunta 2 -->
+            <div class="card-pergunta">
+                <h2>O que a Luiza acha do <abbr title="Bolsonaro">mito</abbr>? 🗽⛓️‍💥💣</h2>
+                <input type="text" id="p2" placeholder="Insira a sua resposta">
+            </div>
+ 
+            <!-- Pergunta 3 -->
+            <div class="card-pergunta">
+                <h2>O que o meu amor acha dessa imagem?</h2>
+                <img src="bolso.jpeg" alt="Imagem do mito">
+                <div class="opcoes">
+                    <label><input type="radio" value="totalmente descolado" name="p3"> totalmente descolado</label>
+                    <label><input type="radio" value="lembra o namorado patriota dela" name="p3"> <abbr title="João Victor">lembra o namorado patriota dela</abbr></label>
+                    <label><input type="radio" value="que tem muita aura" name="p3"> que tem muita aura</label>
+                    <label><input type="radio" value="lembra a feiura da Moana" name="p3"> lembra a feiura da <abbr title="Gabiru feio">Moana</abbr></label>
+                </div>
+            </div>
+ 
+            <button class="btn-enviar" onclick="verificarRespostas()">Enviar respostas 💌</button>
+ 
+        </div>
+    </div>
+ 
+    <!-- ===== TELA DE VITÓRIA ===== -->
+    <div id="tela-vitoria" class="tela">
+        
+        <div class="resultado-box">
+            <div class="emoji-big">🥰</div>
+            <h1>Acertou tudo!</h1>
+            <p>Eu realmente conheço o meu amor bem demais. Te amo muito! 💕</p>
+            
+  
+            <div class="audio-player">
+                <audio controls autoplay loop>
+                    <source src="eu-escolheria-voce-s2.mp3" type="audio/mpeg">
+            
+                </audio>
+            </div>
+ 
+            <br>
+            <button class="btn-reiniciar" onclick="reiniciar()">Jogar de novo 🔄</button>
+        </div>
+    </div>
+ 
+    <!-- ===== TELA DE DERROTA ===== -->
+    <div id="tela-derrota" class="tela">
+        <div class="resultado-box">
+            <div class="emoji-big">🤬🤬</div>
+            <h1>Erro no sistema!</h1>
+            <p>Saia daqui Intruso, você não é o meu xuxu</p>
+ 
+            <div class="audio-player">
+                <audio controls autoplay loop>
+                    <source src="arabemusic.mp3" type="audio/mpeg">
+                    Seu navegador não suporta áudio.
+                </audio>
+            </div>
+ 
+            <br>
+            <button class="btn-reiniciar" onclick="reiniciar()">Tentar de novo 🔄</button>
+        </div>
+    </div>
+ 
+    <script>
+        // ===== RESPOSTAS CORRETAS =====
+        const respostasCorretas = {
+            p1: "Chocolate meio amargo",
+            p2: "based",
+            p3: "lembra o namorado patriota dela"
+        };
+ 
+        function verificarRespostas() {
+            // Pegar respostas do usuário
+            const r1 = document.querySelector('input[name="p1"]:checked');
+            const r2 = document.getElementById('p2').value.trim().toLowerCase();
+            const r3 = document.querySelector('input[name="p3"]:checked');
+ 
+            // Verificar se todas foram respondidas
+            if (!r1) {
+                alert('Responda a pergunta 1! 🤨');
+                return;
+            }
+            if (!r2) {
+                alert('Responda a pergunta 2! 🤨');
+                return;
+            }
+            if (!r3) {
+                alert('Responda a pergunta 3! 🤨');
+                return;
+            }
+ 
+            // Checar acertos
+            const acerto1 = r1.value === respostasCorretas.p1;
+            const acerto2 = r2 === respostasCorretas.p2.toLowerCase();
+            const acerto3 = r3.value === respostasCorretas.p3;
+ 
+            // Navegar para a tela certa
+            if (acerto1 && acerto2 && acerto3) {
+                mostrarTela('tela-vitoria');
+            } else {
+                mostrarTela('tela-derrota');
+            }
+        }
+ 
+        function mostrarTela(id) {
+            document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+            document.getElementById(id).classList.add('ativa');
+            window.scrollTo(0, 0);
+        }
+ 
+        function reiniciar() {
+            // Parar músicas
+            document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
+            // Limpar respostas
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            document.getElementById('p2').value = '';
+            // Voltar para o quiz
+            mostrarTela('tela-quiz');
+        }
+    </script>
+ 
+</body>
+</html>
